@@ -20,20 +20,20 @@ class CurrencyRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val cachedRates = localDataSource.getExchangeRates().firstOrNull()
-            if (!cachedRates.isNullOrEmpty()) {
-                emit(Resource.Success(cachedRates))
-            }
-
             val response = remoteDataSource.fetchExchangeRates()
-            val rates = response.rates.map { (currency, rate) ->
+            val ratesList = response.rates.map { (currency, rate) ->
                 CurrencyRate(currency, rate)
             }
 
-            localDataSource.saveExchangeRates(rates)  // Cache new rates
-            emit(Resource.Success(rates))
+            localDataSource.saveExchangeRates(ratesList)
+            emit(Resource.Success(ratesList))
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Error fetching exchange rates"))
+            val cachedRates = localDataSource.getExchangeRates().firstOrNull()
+            if (cachedRates.isNullOrEmpty()) {
+                emit(Resource.Error("Failed to fetch exchange rates: ${e.message}"))
+            } else {
+                emit(Resource.Success(cachedRates))
+            }
         }
     }
 
@@ -51,7 +51,7 @@ class CurrencyRepositoryImpl @Inject constructor(
                 CurrencySymbol(code, name)
             }
 
-            localDataSource.saveCurrencySymbols(symbols)  // Cache new symbols
+            localDataSource.saveCurrencySymbols(symbols)
             emit(Resource.Success(symbols))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error fetching currency symbols"))
@@ -60,15 +60,14 @@ class CurrencyRepositoryImpl @Inject constructor(
 
     override suspend fun convertCurrency(amount: Double, from: String, to: String): Double {
         val rates = localDataSource.getExchangeRates().firstOrNull()
-            ?: throw Exception("No exchange rates available")
+            ?: throw IllegalStateException("No exchange rates available")
 
         val fromRate = rates.find { it.currency == from }?.rate
+            ?: throw IllegalArgumentException("Exchange rate for $from not found")
         val toRate = rates.find { it.currency == to }?.rate
-
-        if (fromRate == null || toRate == null) {
-            throw Exception("Invalid currency codes")
-        }
+            ?: throw IllegalArgumentException("Exchange rate for $to not found")
 
         return (amount / fromRate) * toRate
     }
+
 }
