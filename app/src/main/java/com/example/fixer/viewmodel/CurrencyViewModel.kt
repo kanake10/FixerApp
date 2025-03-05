@@ -51,10 +51,21 @@ class CurrencyViewModel @Inject constructor(
 
     fun convertCurrency(amount: Double, from: String, to: String) {
         viewModelScope.launch {
-            val convertedAmount = repository.convertCurrency(amount, from, to)
-            _uiState.value = _uiState.value.copy(convertedAmount = convertedAmount)
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            try {
+                val convertedAmount = repository.convertCurrency(amount, from, to)
+                _uiState.value = _uiState.value.copy(convertedAmount = convertedAmount, isLoading = false)
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(error = e.message, isLoading = false)
+            }
         }
     }
+
+    fun setError(message: String?) {
+        _uiState.value = _uiState.value.copy(error = message)
+    }
+
+
 }
 
 data class CurrencyUiState(
