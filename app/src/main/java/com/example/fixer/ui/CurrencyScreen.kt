@@ -121,7 +121,6 @@ fun CurrencyScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
     }
 }
 
-/** Dropdown for selecting a currency */
 @Composable
 fun CurrencyDropdown(
     selectedCurrency: String,
@@ -129,6 +128,7 @@ fun CurrencyDropdown(
     onCurrencySelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
@@ -153,26 +153,45 @@ fun CurrencyDropdown(
             onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxWidth()
         ) {
-            symbols.forEach { symbol ->
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                label = { Text("Search Currency by Name") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
+            val filteredSymbols = symbols.filter {
+                it.name.contains(searchQuery, ignoreCase = true)
+            }
+            filteredSymbols.forEach { symbol ->
                 DropdownMenuItem(
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            CurrencyFlag(symbol.code) // Load currency flag dynamically
+                            CurrencyFlag(symbol.code)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("${symbol.code}")
+                            Text("${symbol.code} - ${symbol.name}")
                         }
                     },
                     onClick = {
                         onCurrencySelected(symbol.code)
-                        expanded = false // Close dropdown
+                        expanded = false
+                        searchQuery = ""
                     }
+                )
+            }
+
+            if (filteredSymbols.isEmpty()) {
+                Text(
+                    text = "No results found",
+                    modifier = Modifier.padding(8.dp),
+                    color = Color.Gray
                 )
             }
         }
     }
 }
 
-/** Loads and displays the currency flag */
 @Composable
 fun CurrencyFlag(currencyCode: String) {
     val flagUrl = "https://flagcdn.com/w40/${currencyCode.take(2).lowercase()}.png"
