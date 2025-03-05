@@ -2,6 +2,9 @@ package com.example.fixer.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.core.Constants.API_KEY
+import com.example.core.Constants.BASE_URL
+import com.example.core.Constants.DB_NAME
 import com.example.core.dao.CurrencyDao
 import com.example.core.db.AppDatabase
 import com.example.currency.repo.CurrencyRepository
@@ -10,26 +13,52 @@ import com.example.currency.sources.RemoteDataSource
 import com.example.currencyimpl.repoimpl.CurrencyRepositoryImpl
 import com.example.currencyimpl.sourceimpl.LocalDataSourceImpl
 import com.example.currencyimpl.sourceimpl.RemoteDataSourceImpl
+import com.example.network.ApiInterceptor
 import com.example.network.FixerApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(ApiInterceptor(API_KEY))
+            .callTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+
+        return okHttpClient.build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://data.fixer.io/api/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
     }
 
@@ -45,7 +74,7 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "currency_database"
+            DB_NAME
         ).fallbackToDestructiveMigration().build()
     }
 
