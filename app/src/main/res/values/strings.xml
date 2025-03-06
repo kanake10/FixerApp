@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">Fixer</string>
+<string name="app_name">Fixer</string>
+<string name="menu">Menu</string>
+<string name="sign_up">Sign Up</string>
+<string name="currency">Currency</string>
+<string name="calculator">Calculator</string>
+<string name="enter_amount">Enter Amount</string>
+<string name="converted_amount">Converted Amount</string>
+<string name="swap_currencies">Swap Currencies</string>
+<string name="convert">Convert</string>
+<string name="search_currency">Search currency</string>
+<string name="no_results_found">No results found</string>
+<string name="error_enter_amount">Please enter an amount</string>
+<string name="error_select_currency">Please select a currency</string>
+<string name="error_different_currency">Please select a different currency</string>
 </resources>
