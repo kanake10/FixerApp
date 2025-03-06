@@ -85,3 +85,12 @@ This project includes several levels of tests to ensure proper functionality and
 - **Detekt** and **Ktlint** are integrated to ensure clean and maintainable code.
   - **Detekt**: Analyzes the Kotlin code for potential issues such as code smells, complexity, and style violations.
   - **Ktlint**: Enforces consistent code formatting following Kotlin style guidelines.
+ 
+## Ui Preview
+
+The device used for testing is Google Pixel 6A
+ 
+| Home | CurrenyList | CurrencySearch |
+| --- | --- | --- |
+| ![Email](https://github.com/kanake10/FixerApp/blob/main/screenshots/home.png) | ![Location](https://github.com/kanake10/FixerApp/blob/main/screenshots/currencylist.png) | ![Signin](https://github.com/kanake10/FixerApp/blob/main/screenshots/search.png) |
+
