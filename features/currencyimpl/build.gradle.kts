@@ -43,5 +43,5 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android)
     implementation(libs.androidx.runtime.livedata)
-    ksp ("com.google.dagger:hilt-compiler:2.50")
+    ksp("com.google.dagger:hilt-compiler:2.50")
 }
