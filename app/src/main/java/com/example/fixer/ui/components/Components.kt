@@ -120,7 +120,6 @@ fun ConvertedAmountField(convertedAmount: String, toCurrency: String) {
     OutlinedTextField(
         value = convertedAmount,
         onValueChange = {},
-        label = { Text(stringResource(id = R.string.converted_amount)) },
         enabled = false,
         modifier = Modifier.fillMaxWidth(),
         trailingIcon = { Text(toCurrency, color = Color.Gray) }
