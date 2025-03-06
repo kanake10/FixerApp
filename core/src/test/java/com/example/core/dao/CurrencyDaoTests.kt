@@ -1,6 +1,5 @@
 package com.example.core.dao
 
-
 import com.example.core.base.BaseDbTest
 import com.example.core.model.CurrencyRate
 import com.example.core.model.CurrencySymbol
@@ -10,7 +9,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-
 
 @ExperimentalCoroutinesApi
 class CurrencyDaoTest : BaseDbTest() {
@@ -68,14 +66,3 @@ class CurrencyDaoTest : BaseDbTest() {
         )
     }
 }
-
-
-
-
-
-
-
-
-
-
-

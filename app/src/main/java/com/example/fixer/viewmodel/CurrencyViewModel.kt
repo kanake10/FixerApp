@@ -64,8 +64,6 @@ class CurrencyViewModel @Inject constructor(
     fun setError(message: String?) {
         _uiState.value = _uiState.value.copy(error = message)
     }
-
-
 }
 
 data class CurrencyUiState(

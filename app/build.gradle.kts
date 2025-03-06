@@ -63,7 +63,6 @@ android {
             )
         }
     }
-
 }
 
 dependencies {
@@ -88,7 +87,7 @@ dependencies {
     implementation(project(":libraries:testing"))
     implementation(libs.hilt.android)
     implementation(libs.androidx.runtime.livedata)
-    ksp ("com.google.dagger:hilt-compiler:2.50")
+    ksp("com.google.dagger:hilt-compiler:2.50")
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.room.runtime)
@@ -100,5 +99,4 @@ dependencies {
     implementation(libs.okhttp.logging)
 
     implementation(libs.coil.compose)
-
 }

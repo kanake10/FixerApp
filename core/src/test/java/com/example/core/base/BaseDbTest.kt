@@ -28,6 +28,3 @@ abstract class BaseDbTest {
         database.close()
     }
 }
-
-
-
