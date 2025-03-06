@@ -69,7 +69,7 @@ class CurrencyCalculatorUiTest {
             ConvertedAmountField(convertedAmount = "450", toCurrency = "PLN")
         }
 
-        composeTestRule.onNodeWithText("Converted Amount").assertExists()
+        composeTestRule.onNodeWithTag("convertedAmountField").assertExists()
         composeTestRule.onNodeWithText("450").assertExists()
         composeTestRule.onNodeWithText("PLN").assertExists()
         composeTestRule.onNodeWithText("450").assertIsNotEnabled()
