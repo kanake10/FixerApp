@@ -25,7 +25,7 @@ class CurrencyViewModel @Inject constructor(
         fetchCurrencySymbols()
     }
 
-    private fun fetchExchangeRates() {
+    fun fetchExchangeRates() {
         viewModelScope.launch {
             repository.getExchangeRates().collect { result ->
                 _uiState.value = when (result) {
@@ -37,7 +37,7 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCurrencySymbols() {
+    fun fetchCurrencySymbols() {
         viewModelScope.launch {
             repository.getCurrencySymbols().collect { result ->
                 _uiState.value = when (result) {

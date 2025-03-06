@@ -33,11 +33,15 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(project(":core"))
+    implementation(project(":features:currency"))
+    api(libs.junit4)
+    api(libs.junit4.ext)
+    api(libs.turbine)
+    api(libs.mock.android)
+    api(libs.mock.agent)
+    api(libs.google.truth)
+    api(libs.coroutines.test)
+    api(libs.espresso.core)
+    api(libs.androidx.arch.core.testing)
 }
