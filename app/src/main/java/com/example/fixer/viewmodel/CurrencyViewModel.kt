@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Ezra Kanake.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.fixer.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -7,10 +22,10 @@ import com.example.core.model.CurrencyRate
 import com.example.core.model.CurrencySymbol
 import com.example.currency.repo.CurrencyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
@@ -29,8 +44,14 @@ class CurrencyViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getExchangeRates().collect { result ->
                 _uiState.value = when (result) {
-                    is Resource.Success -> _uiState.value.copy(exchangeRates = result.data, isLoading = false)
-                    is Resource.Error -> _uiState.value.copy(error = result.message, isLoading = false)
+                    is Resource.Success -> _uiState.value.copy(
+                        exchangeRates = result.data,
+                        isLoading = false
+                    )
+                    is Resource.Error -> _uiState.value.copy(
+                        error = result.message,
+                        isLoading = false
+                    )
                     is Resource.Loading -> _uiState.value.copy(isLoading = true)
                 }
             }
@@ -41,8 +62,14 @@ class CurrencyViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getCurrencySymbols().collect { result ->
                 _uiState.value = when (result) {
-                    is Resource.Success -> _uiState.value.copy(currencySymbols = result.data, isLoading = false)
-                    is Resource.Error -> _uiState.value.copy(error = result.message, isLoading = false)
+                    is Resource.Success -> _uiState.value.copy(
+                        currencySymbols = result.data,
+                        isLoading = false
+                    )
+                    is Resource.Error -> _uiState.value.copy(
+                        error = result.message,
+                        isLoading = false
+                    )
                     is Resource.Loading -> _uiState.value.copy(isLoading = true)
                 }
             }
@@ -54,7 +81,10 @@ class CurrencyViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
                 val convertedAmount = repository.convertCurrency(amount, from, to)
-                _uiState.value = _uiState.value.copy(convertedAmount = convertedAmount, isLoading = false)
+                _uiState.value = _uiState.value.copy(
+                    convertedAmount = convertedAmount,
+                    isLoading = false
+                )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(error = e.message, isLoading = false)
             }

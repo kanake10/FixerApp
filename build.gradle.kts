@@ -19,10 +19,8 @@ subprojects {
         spotless {
             kotlin {
                 target("**/*.kt")
-                targetExclude("**/build/**/*.kt")
-                ktlint()
                 licenseHeaderFile(
-                    rootProject.file("config/copyright.kt"),
+                    rootProject.file("${project.rootDir}/spotless/copyright.kt"),
                     "^(package|object|import|interface)"
                 )
             }
@@ -31,7 +29,9 @@ subprojects {
         ktlint {
             android.set(true)
             verbose.set(true)
-            outputToConsole.set(true)
+            filter {
+                exclude { element -> element.file.path.contains("generated/") }
+            }
         }
 
         detekt {
