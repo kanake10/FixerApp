@@ -2,9 +2,6 @@
 agp = "8.5.2"
 kotlin = "1.9.0"
 coreKtx = "1.15.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2024.04.01"
@@ -14,11 +11,15 @@ room = "2.6.1"
 hilt = "2.50"
 hiltCompose = "1.2.0"
 coroutines = "1.7.3"
-mockito = "5.6.0"
-mockitoKotlin = "5.1.0"
-mockk = "1.13.7"
-okhttpMockWebServer = "4.11.0"
-archCoreTesting = "2.2.0"
+espresso-core = "3.5.1"
+junit4Ext = "1.1.5"
+junit4 = "4.13.2"
+kotlinxCoroutines = "1.8.1"
+turbine = "1.1.0"
+mockk = "1.13.11"
+googleTruth = "1.4.2"
+archCore = "2.2.0"
+robolectric = "4.12.2"
 appcompat = "1.7.0"
 material = "1.12.0"
 runtimeLivedata = "1.7.8"
@@ -26,9 +27,6 @@ coil = "2.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -59,17 +57,23 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
-# Testing
-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
-mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
-okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttpMockWebServer" }
-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCoreTesting" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+junit4-ext = { module = "androidx.test.ext:junit", version.ref = "junit4Ext" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+mock-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+mock-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+google-truth = { module = "com.google.truth:truth", version.ref = "googleTruth" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCore" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 
 [plugins]

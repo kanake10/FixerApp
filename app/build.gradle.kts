@@ -1,3 +1,8 @@
+
+configurations.all {
+    exclude(group = "org.junit.jupiter")
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -44,11 +49,21 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE.txt",
+                "META-INF/LICENSE",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.md",
+                "META-INF/NOTICE.txt",
+                "META-INF/{AL2.0,LGPL2.1}"
+            )
         }
     }
+
 }
 
 dependencies {
@@ -61,9 +76,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
@@ -73,6 +85,7 @@ dependencies {
     implementation(project(":features:currency"))
     implementation(project(":features:currencyimpl"))
     implementation(project(":libraries:network"))
+    implementation(project(":libraries:testing"))
     implementation(libs.hilt.android)
     implementation(libs.androidx.runtime.livedata)
     ksp ("com.google.dagger:hilt-compiler:2.50")

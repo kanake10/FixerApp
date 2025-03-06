@@ -10,6 +10,14 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/currency" />
+            <option value="$PROJECT_DIR$/features/currencyimpl" />
+            <option value="$PROJECT_DIR$/libraries" />
+            <option value="$PROJECT_DIR$/libraries/designsystem" />
+            <option value="$PROJECT_DIR$/libraries/network" />
+            <option value="$PROJECT_DIR$/libraries/testing" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
