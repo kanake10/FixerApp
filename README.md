@@ -41,8 +41,6 @@ This is a Kotlin-based currency converter application built using Jetpack Compos
 
 ## Technologies Used
 
-## Technologies Used
-
 - **[Kotlin](https://kotlinlang.org/)**: The primary programming language.
 - **[Jetpack Compose](https://developer.android.com/jetpack/compose)**: For building the UI.
 - **[Hilt](https://developer.android.com/training/dependency-injection/hilt-android)**: Dependency injection framework.
@@ -57,34 +55,28 @@ This is a Kotlin-based currency converter application built using Jetpack Compos
 - **[Coil](https://coil-kt.github.io/coil/)**: An image loading library for Android that supports both caching and image transformation.
 
 
-## Testing
-
-This project includes several levels of tests to ensure proper functionality and stability:
-
-### 1. **DAO Tests**:
-   - Test the local Room database interactions, ensuring data is stored and retrieved correctly.
-   - Includes tests for the currency data cache.
-
-### 2. **Repository Implementation Tests**:
-   - Verify that the repository interacts with both remote and local data sources.
-
-### 3. **ViewModel Tests**:
-   - Ensure that the ViewModel correctly handles UI states like loading, success and error.
-   - Test the business logic, including currency conversion calculations and error handling.
-
-### 4. **Currency Component Tests**:
-   - Verify individual UI components in the currency converter screen, such as text fields, buttons, and dropdowns.
-   - Test that the UI responds to state changes properly.
-
-### 5. **UI Tests**:
-   - Ensure the UI displays correctly according to the design mockups.
-   - Tests for user interactions such as clicking the "Convert" button, selecting currencies, and verifying the converted amount.
-
 ## Static Code Analysis
 
 - **Detekt** and **Ktlint** are integrated to ensure clean and maintainable code.
   - **Detekt**: Analyzes the Kotlin code for potential issues such as code smells, complexity, and style violations.
   - **Ktlint**: Enforces consistent code formatting following Kotlin style guidelines.
+
+## Testing  
+
+This project includes multiple test categories to ensure stability and correctness:  
+
+- **DAO Tests** (Room database interactions)  
+- **Repository Implementation Tests** (Local & remote data handling)  
+- **ViewModel Tests** (UI state management & business logic)  
+- **Currency Component Tests** (UI elements & state changes)  
+- **UI Tests** (User interactions & layout validation)  
+
+### Running Tests  
+
+Run all tests:  
+```sh
+./gradlew test
+```
  
 ## Ui Preview
 
