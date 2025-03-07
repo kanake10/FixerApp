@@ -37,6 +37,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -112,7 +113,11 @@ fun AmountInputField(amount: String, fromCurrency: String, onAmountChange: (Stri
         label = { Text(stringResource(id = R.string.enter_amount)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = Modifier.fillMaxWidth(),
-        trailingIcon = { Text(fromCurrency, color = Color.Gray) }
+        trailingIcon = {
+            Text(
+                fromCurrency,
+                color = MaterialTheme.colorScheme.primary)
+        }
     )
 }
 
@@ -125,7 +130,12 @@ fun ConvertedAmountField(convertedAmount: String, toCurrency: String) {
         modifier = Modifier
             .fillMaxWidth()
             .testTag("convertedAmountField"),
-        trailingIcon = { Text(toCurrency, color = Color.Gray) }
+        trailingIcon = {
+            Text(
+                toCurrency,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
     )
 }
 
@@ -225,9 +235,18 @@ fun CurrencyDropdown(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CurrencyFlag(selectedCurrency)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(selectedCurrency, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(
+                        selectedCurrency,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.primary
+                        )
                 }
-                Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Dropdown",
+                    tint = MaterialTheme.colorScheme.primary
+                    )
             }
         }
 
