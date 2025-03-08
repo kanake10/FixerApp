@@ -98,8 +98,8 @@ class CurrencyViewModel @Inject constructor(
 
 data class CurrencyUiState(
     val isLoading: Boolean = false,
-    val exchangeRates: List<CurrencyRate>? = null,
-    val currencySymbols: List<CurrencySymbol>? = null,
+    val exchangeRates: List<CurrencyRate> = emptyList(),
+    val currencySymbols: List<CurrencySymbol> = emptyList(),
     val error: String? = null,
     val convertedAmount: Double = 0.0
 )
