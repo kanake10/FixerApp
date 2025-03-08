@@ -30,6 +30,7 @@ import com.example.currencyimpl.sourceimpl.LocalDataSourceImpl
 import com.example.currencyimpl.sourceimpl.RemoteDataSourceImpl
 import com.example.network.ApiInterceptor
 import com.example.network.FixerApiService
+import com.example.network.NetworkChecker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -113,8 +114,15 @@ object AppModule {
     @Singleton
     fun provideCurrencyRepository(
         remoteDataSource: RemoteDataSource,
-        localDataSource: LocalDataSource
+        localDataSource: LocalDataSource,
+        networkChecker: NetworkChecker
     ): CurrencyRepository {
-        return CurrencyRepositoryImpl(remoteDataSource, localDataSource)
+        return CurrencyRepositoryImpl(remoteDataSource, localDataSource, networkChecker)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNetworkChecker(@ApplicationContext context: Context): NetworkChecker {
+        return NetworkChecker(context)
     }
 }
