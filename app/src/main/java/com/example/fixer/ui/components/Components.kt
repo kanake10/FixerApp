@@ -54,6 +54,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -116,7 +117,8 @@ fun AmountInputField(amount: String, fromCurrency: String, onAmountChange: (Stri
         trailingIcon = {
             Text(
                 fromCurrency,
-                color = MaterialTheme.colorScheme.primary)
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     )
 }
@@ -127,6 +129,7 @@ fun ConvertedAmountField(convertedAmount: String, toCurrency: String) {
         value = convertedAmount,
         onValueChange = {},
         enabled = false,
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .fillMaxWidth()
             .testTag("convertedAmountField"),
@@ -138,7 +141,6 @@ fun ConvertedAmountField(convertedAmount: String, toCurrency: String) {
         }
     )
 }
-
 
 @Composable
 fun CurrencySelectionRow(
@@ -240,13 +242,13 @@ fun CurrencyDropdown(
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.primary
-                        )
+                    )
                 }
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = "Dropdown",
                     tint = MaterialTheme.colorScheme.primary
-                    )
+                )
             }
         }
 
