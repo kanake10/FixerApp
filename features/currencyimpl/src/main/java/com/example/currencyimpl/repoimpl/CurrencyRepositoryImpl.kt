@@ -21,19 +21,32 @@ import com.example.core.model.CurrencySymbol
 import com.example.currency.repo.CurrencyRepository
 import com.example.currency.sources.LocalDataSource
 import com.example.currency.sources.RemoteDataSource
+import com.example.network.NetworkChecker
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
+import java.net.UnknownHostException
 
 class CurrencyRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+    private val networkChecker: NetworkChecker
 ) : CurrencyRepository {
 
     override fun getExchangeRates(): Flow<Resource<List<CurrencyRate>>> = flow {
         emit(Resource.Loading())
 
+        if (!networkChecker.isInternetAvailable()) {
+            val cachedRates = localDataSource.getExchangeRates().firstOrNull()
+            if (!cachedRates.isNullOrEmpty()) {
+                emit(Resource.Success(cachedRates))
+            } else {
+                emit(Resource.Error("No internet connection."))
+            }
+            return@flow
+        }
         try {
             val response = remoteDataSource.fetchExchangeRates()
             val ratesList = response.rates.map { (currency, rate) ->
@@ -42,32 +55,38 @@ class CurrencyRepositoryImpl @Inject constructor(
 
             localDataSource.saveExchangeRates(ratesList)
             emit(Resource.Success(ratesList))
+        } catch (e: UnknownHostException) {
+            emit(Resource.Error("No internet connection. Please check your network."))
+        } catch (e: IOException) {
+            emit(Resource.Error("Network error. Please try again."))
         } catch (e: Exception) {
-            val cachedRates = localDataSource.getExchangeRates().firstOrNull()
-            if (cachedRates.isNullOrEmpty()) {
-                emit(Resource.Error("Failed to fetch exchange rates: ${e.message}"))
-            } else {
-                emit(Resource.Success(cachedRates))
-            }
+            emit(Resource.Error(e.message ?: "Unknown error occurred"))
         }
     }
 
     override fun getCurrencySymbols(): Flow<Resource<List<CurrencySymbol>>> = flow {
         emit(Resource.Loading())
 
-        try {
+        if (!networkChecker.isInternetAvailable()) {
             val cachedSymbols = localDataSource.getCurrencySymbols().firstOrNull()
             if (!cachedSymbols.isNullOrEmpty()) {
                 emit(Resource.Success(cachedSymbols))
+            } else {
+                emit(Resource.Error("No internet connection."))
             }
-
+            return@flow
+        }
+        try {
             val response = remoteDataSource.fetchCurrencySymbols()
             val symbols = response.symbols.map { (code, name) ->
                 CurrencySymbol(code, name)
             }
-
             localDataSource.saveCurrencySymbols(symbols)
             emit(Resource.Success(symbols))
+        } catch (e: UnknownHostException) {
+            emit(Resource.Error("No internet connection. Please check your network."))
+        } catch (e: IOException) {
+            emit(Resource.Error("Network error. Please try again."))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error fetching currency symbols"))
         }
@@ -75,13 +94,21 @@ class CurrencyRepositoryImpl @Inject constructor(
 
     override suspend fun convertCurrency(amount: Double, from: String, to: String): Double {
         val rates = localDataSource.getExchangeRates().firstOrNull()
-            ?: throw IllegalStateException("No exchange rates available")
+        if (rates.isNullOrEmpty()) {
+            if (!networkChecker.isInternetAvailable()) {
+                throw IllegalStateException("No internet connection. Please connect to proceed.")
+            }
+            throw IllegalStateException("Exchange rates are not available")
+        }
 
         val fromRate = rates.find { it.currency == from }?.rate
-            ?: throw IllegalArgumentException("Exchange rate for $from not found")
         val toRate = rates.find { it.currency == to }?.rate
-            ?: throw IllegalArgumentException("Exchange rate for $to not found")
+
+        if (fromRate == null) throw IllegalArgumentException("Exchange rate for $from not found")
+        if (toRate == null) throw IllegalArgumentException("Exchange rate for $to not found")
 
         return (amount / fromRate) * toRate
     }
 }
+
+

@@ -20,6 +20,7 @@ import com.example.core.Resource
 import com.example.core.model.CurrencyRate
 import com.example.currency.sources.LocalDataSource
 import com.example.currency.sources.RemoteDataSource
+import com.example.network.NetworkChecker
 import com.example.testing.utils.currencyRates
 import com.example.testing.utils.currencySymbols
 import com.example.testing.utils.exchangeRatesResponse
@@ -38,7 +39,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class CurrencyRepositoryTest {
 
     @MockK
@@ -47,6 +48,9 @@ class CurrencyRepositoryTest {
     @MockK
     lateinit var localDataSource: LocalDataSource
 
+    @MockK
+    lateinit var networkChecker: NetworkChecker
+
     private lateinit var repository: CurrencyRepositoryImpl
 
     @Before
@@ -54,12 +58,14 @@ class CurrencyRepositoryTest {
         MockKAnnotations.init(this)
         repository = CurrencyRepositoryImpl(
             remoteDataSource = remoteDataSource,
-            localDataSource = localDataSource
+            localDataSource = localDataSource,
+            networkChecker = networkChecker
         )
     }
 
     @Test
     fun `getExchangeRates should emit success when API call succeeds`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns true
         coEvery { remoteDataSource.fetchExchangeRates() } returns exchangeRatesResponse().first()
         coEvery { localDataSource.saveExchangeRates(any()) } just Runs
         every { localDataSource.getExchangeRates() } returns flowOf(currencyRates())
@@ -73,21 +79,8 @@ class CurrencyRepositoryTest {
     }
 
     @Test
-    fun `getExchangeRates should emit error when API call fails and no cache available`() = runTest {
-        coEvery { remoteDataSource.fetchExchangeRates() } throws IOException("Network error")
-        every { localDataSource.getExchangeRates() } returns flowOf(emptyList())
-
-        repository.getExchangeRates().test {
-            assert(awaitItem() is Resource.Loading)
-            val error = awaitItem() as Resource.Error
-            assert(error.message?.contains("Failed to fetch exchange rates") == true)
-            cancelAndConsumeRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `getExchangeRates should emit cached data when API call fails`() = runTest {
-        coEvery { remoteDataSource.fetchExchangeRates() } throws IOException("Network error")
+    fun `getExchangeRates should emit cached data when offline`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns false
         every { localDataSource.getExchangeRates() } returns flowOf(currencyRates())
 
         repository.getExchangeRates().test {
@@ -99,7 +92,35 @@ class CurrencyRepositoryTest {
     }
 
     @Test
+    fun `getExchangeRates should emit error when API and cache both fail`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns false
+        every { localDataSource.getExchangeRates() } returns flowOf(emptyList())
+
+        repository.getExchangeRates().test {
+            assert(awaitItem() is Resource.Loading)
+            val error = awaitItem() as Resource.Error
+            assert(error.message == "No internet connection.")
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `getExchangeRates should emit error when API call fails`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns true
+        coEvery { remoteDataSource.fetchExchangeRates() } throws IOException("Network error")
+        every { localDataSource.getExchangeRates() } returns flowOf(emptyList())
+
+        repository.getExchangeRates().test {
+            assert(awaitItem() is Resource.Loading)
+            val error = awaitItem() as Resource.Error
+            assert(error.message == "Network error. Please try again.")
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
     fun `getCurrencySymbols should emit success when API call succeeds`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns true
         coEvery { remoteDataSource.fetchCurrencySymbols() } returns symbolsResponse()
         coEvery { localDataSource.saveCurrencySymbols(any()) } just Runs
         every { localDataSource.getCurrencySymbols() } returns flowOf(currencySymbols())
@@ -113,21 +134,8 @@ class CurrencyRepositoryTest {
     }
 
     @Test
-    fun `getCurrencySymbols should emit error when API call fails`() = runTest {
-        coEvery { remoteDataSource.fetchCurrencySymbols() } throws IOException("Network error")
-        every { localDataSource.getCurrencySymbols() } returns flowOf(emptyList())
-
-        repository.getCurrencySymbols().test {
-            assert(awaitItem() is Resource.Loading)
-            val error = awaitItem() as Resource.Error
-            assert(error.message == "Network error")
-            cancelAndConsumeRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `getCurrencySymbols should emit cached data when API call fails`() = runTest {
-        coEvery { remoteDataSource.fetchCurrencySymbols() } throws IOException("Network error")
+    fun `getCurrencySymbols should emit cached data when offline`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns false
         every { localDataSource.getCurrencySymbols() } returns flowOf(currencySymbols())
 
         repository.getCurrencySymbols().test {
@@ -139,12 +147,55 @@ class CurrencyRepositoryTest {
     }
 
     @Test
+    fun `getCurrencySymbols should emit error when API and cache both fail`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns false
+        every { localDataSource.getCurrencySymbols() } returns flowOf(emptyList())
+
+        repository.getCurrencySymbols().test {
+            assert(awaitItem() is Resource.Loading)
+            val error = awaitItem() as Resource.Error
+            assert(error.message == "No internet connection.")
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `getCurrencySymbols should emit error when API call fails`() = runTest {
+        every { networkChecker.isInternetAvailable() } returns true
+        coEvery { remoteDataSource.fetchCurrencySymbols() } throws IOException("Network error")
+        every { localDataSource.getCurrencySymbols() } returns flowOf(emptyList())
+
+        repository.getCurrencySymbols().test {
+            assert(awaitItem() is Resource.Loading)
+            val error = awaitItem() as Resource.Error
+            assert(error.message == "Network error. Please try again.")
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
     fun `convertCurrency should correctly convert between different currencies`() = runTest {
         every { localDataSource.getExchangeRates() } returns flowOf(testExchangeRates())
 
         val convertedAmount = repository.convertCurrency(200.0, "GBP", "USD")
 
         assert(convertedAmount == (200.0 / 0.85) * 1.1)
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun `convertCurrency should throw error if no exchange rates available and offline`() = runTest {
+        every { localDataSource.getExchangeRates() } returns flowOf(emptyList())
+        every { networkChecker.isInternetAvailable() } returns false
+
+        repository.convertCurrency(100.0, "EUR", "USD")
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun `convertCurrency should throw error if exchange rates are empty`() = runTest {
+        every { localDataSource.getExchangeRates() } returns flowOf(emptyList())
+        every { networkChecker.isInternetAvailable() } returns true
+
+        repository.convertCurrency(100.0, "EUR", "USD")
     }
 
     @Test(expected = IllegalArgumentException::class)
