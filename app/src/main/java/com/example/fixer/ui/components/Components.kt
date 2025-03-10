@@ -62,6 +62,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.core.model.CurrencySymbol
 import com.example.fixer.R
+import com.example.fixer.util.formatNumber
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,10 +109,17 @@ fun CurrencyTitle() {
 }
 
 @Composable
-fun AmountInputField(amount: String, fromCurrency: String, onAmountChange: (String) -> Unit) {
+fun AmountInputField(
+    amount: String,
+    fromCurrency: String,
+    onAmountChange: (String) -> Unit
+) {
     OutlinedTextField(
-        value = amount,
-        onValueChange = onAmountChange,
+        value = formatNumber(amount),
+        onValueChange = { input ->
+            val rawInput = input.replace(Regex("[^\\d.]"), "")
+            onAmountChange(rawInput)
+        },
         label = { Text(stringResource(id = R.string.enter_amount)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = Modifier.fillMaxWidth(),
@@ -124,9 +133,14 @@ fun AmountInputField(amount: String, fromCurrency: String, onAmountChange: (Stri
 }
 
 @Composable
-fun ConvertedAmountField(convertedAmount: String, toCurrency: String) {
+fun ConvertedAmountField(
+    convertedAmount: String,
+    toCurrency: String
+) {
+    val formattedAmount = formatNumber(convertedAmount)
+
     OutlinedTextField(
-        value = convertedAmount,
+        value = formattedAmount,
         onValueChange = {},
         enabled = false,
         textStyle = TextStyle(color = MaterialTheme.colorScheme.primary),
