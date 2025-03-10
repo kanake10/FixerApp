@@ -47,7 +47,7 @@ import com.example.fixer.viewmodel.CurrencyViewModel
 fun CurrencyScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
-    var amount by remember { mutableStateOf("1") }
+    var amount by remember { mutableStateOf("0") }
     var fromCurrency by remember { mutableStateOf("EUR") }
     var toCurrency by remember { mutableStateOf("PLN") }
     val focusManager = LocalFocusManager.current
