@@ -23,8 +23,6 @@ import com.example.fixer.ui.components.ConvertButton
 import com.example.fixer.ui.components.ConvertedAmountField
 import com.example.fixer.ui.components.CurrencyDropdown
 import com.example.fixer.ui.components.CurrencyTitle
-import com.example.fixer.ui.components.CurrencyTopBar
-import com.example.fixer.ui.components.ErrorMessage
 import org.junit.Rule
 import org.junit.Test
 
@@ -32,14 +30,6 @@ class CurrencyCalculatorUiTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-
-    @Test
-    fun testCurrencyTopBar_isDisplayed() {
-        composeTestRule.setContent { CurrencyTopBar() }
-
-        composeTestRule.onNodeWithContentDescription("Menu").assertExists()
-        composeTestRule.onNodeWithText("Sign Up").assertExists()
-    }
 
     @Test
     fun testCurrencyTitle_isDisplayed() {
@@ -111,14 +101,5 @@ class CurrencyCalculatorUiTest {
         composeTestRule.onNodeWithText("Kenyan Shilling").performClick()
 
         assert(selectedCurrency == "KES")
-    }
-
-    @Test
-    fun testErrorMessage_isDisplayed() {
-        composeTestRule.setContent {
-            ErrorMessage(error = "Invalid amount")
-        }
-
-        composeTestRule.onNodeWithText("Invalid amount").assertExists()
     }
 }

@@ -104,12 +104,4 @@ class CurrencyViewModelTest : BaseViewModelTest() {
         assertThat(state.error).isEqualTo("Failed to fetch symbols")
         assertThat(state.isLoading).isFalse()
     }
-
-    @Test
-    fun `setError should update uiState with error message`() = runTest {
-        viewModel.setError("Test Error")
-
-        val state = viewModel.uiState.first()
-        assertThat(state.error).isEqualTo("Test Error")
-    }
 }

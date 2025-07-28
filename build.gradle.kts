@@ -8,6 +8,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
     id("com.diffplug.spotless") version "6.24.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
+    alias(libs.plugins.kover).apply(false)
 }
 
 subprojects {
