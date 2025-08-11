@@ -35,6 +35,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fixer.ui.components.AmountInputField
 import com.example.fixer.ui.components.ConvertButton
 import com.example.fixer.ui.components.ConvertedAmountField
@@ -44,7 +45,7 @@ import com.example.fixer.viewmodel.CurrencyViewModel
 
 @Composable
 fun CurrencyScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var amount by remember { mutableStateOf("") }
     var fromCurrency by remember { mutableStateOf("EUR") }
