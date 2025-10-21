@@ -25,10 +25,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -47,9 +46,9 @@ import com.example.fixer.viewmodel.CurrencyViewModel
 fun CurrencyScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var amount by remember { mutableStateOf("") }
-    var fromCurrency by remember { mutableStateOf("EUR") }
-    var toCurrency by remember { mutableStateOf("PLN") }
+    var amount by rememberSaveable { mutableStateOf("") }
+    var fromCurrency by rememberSaveable { mutableStateOf("EUR") }
+    var toCurrency by rememberSaveable { mutableStateOf("USD") }
     val focusManager = LocalFocusManager.current
 
     Scaffold() { paddingValues ->
