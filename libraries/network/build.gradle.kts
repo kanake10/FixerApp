@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.network"
+    namespace = "com.kanake.network"
     compileSdk = 34
 
     defaultConfig {

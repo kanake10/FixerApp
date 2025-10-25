@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.currency"
+    namespace = "com.kanake.currency"
     compileSdk = 34
 
     defaultConfig {

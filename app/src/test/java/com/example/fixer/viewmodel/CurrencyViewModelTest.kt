@@ -15,12 +15,13 @@
  */
 package com.example.fixer.viewmodel
 
-import com.example.core.Resource
-import com.example.testing.utils.base.BaseViewModelTest
-import com.example.testing.utils.repo.TestCurrencyRepository
-import com.example.testing.utils.testCurrencySymbols
-import com.example.testing.utils.testExchangeRates
+import com.kanake.core.Resource
+import com.kanake.testing.utils.base.BaseViewModelTest
+import com.kanake.testing.utils.repo.TestCurrencyRepository
+import com.kanake.testing.utils.testCurrencySymbols
+import com.kanake.testing.utils.testExchangeRates
 import com.google.common.truth.Truth.assertThat
+import com.kanake.ratex.viewmodel.CurrencyViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

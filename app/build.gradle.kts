@@ -1,7 +1,10 @@
+import java.util.Properties
+import java.io.File
 
 configurations.all {
     exclude(group = "org.junit.jupiter")
 }
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,41 +14,73 @@ plugins {
     alias(libs.plugins.kover)
 }
 
+val localProperties = Properties().apply {
+    load(File(rootDir, "local.properties").inputStream())
+}
+
+val apiKey: String = localProperties.getProperty("API_KEY") ?: ""
+val baseUrl: String = localProperties.getProperty("BASE_URL") ?: ""
+
 android {
-    namespace = "com.example.fixer"
+    namespace = "com.kanake.ratex"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.fixer"
+        applicationId = "com.kanake.ratex"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreFile = project.findProperty("KEYSTORE_FILE") as String?
+            if (keystoreFile != null && file(keystoreFile).exists()) {
+                storeFile = file(keystoreFile)
+                storePassword = project.findProperty("KEYSTORE_PASSWORD") as String?
+                keyAlias = project.findProperty("KEY_ALIAS") as String?
+                keyPassword = project.findProperty("KEY_PASSWORD") as String?
+            } else {
+            }
+        }
+    }
+
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+
+        getByName("debug") {
+            isDebuggable = true
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -65,6 +100,7 @@ android {
         }
     }
 }
+
 
 dependencies {
 

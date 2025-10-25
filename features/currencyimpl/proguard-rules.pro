@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn com.kanake.currencyimpl.repoimpl.CurrencyRepositoryImpl
+-dontwarn com.kanake.currencyimpl.sourceimpl.LocalDataSourceImpl
+-dontwarn com.kanake.currencyimpl.sourceimpl.RemoteDataSourceImpl

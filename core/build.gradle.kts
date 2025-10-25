@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.core"
+    namespace = "com.kanake.core"
     compileSdk = 34
 
     defaultConfig {
@@ -45,7 +45,6 @@ dependencies {
     api(libs.junit4.ext)
     api(libs.turbine)
     api(libs.mock.android)
-    api(libs.mock.agent)
     api(libs.google.truth)
     api(libs.coroutines.test)
     api(libs.espresso.core)

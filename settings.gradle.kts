@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Fixer"
+rootProject.name = "RateX"
 include(":app")
 include(":core")
 include(":libraries:network")

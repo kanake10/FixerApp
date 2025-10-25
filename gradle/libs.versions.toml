@@ -68,7 +68,6 @@ junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junit4-ext = { module = "androidx.test.ext:junit", version.ref = "junit4Ext" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 mock-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
-mock-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 google-truth = { module = "com.google.truth:truth", version.ref = "googleTruth" }

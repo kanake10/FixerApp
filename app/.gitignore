@@ -1,1 +1,6 @@
 /build
+local.properties
+*.jks
+keystore/ratex-release.jks
+*.jks
+*.keystore

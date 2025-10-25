@@ -17,12 +17,12 @@ package com.example.fixer.ui
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.example.core.model.CurrencySymbol
-import com.example.fixer.ui.components.AmountInputField
-import com.example.fixer.ui.components.ConvertButton
-import com.example.fixer.ui.components.ConvertedAmountField
-import com.example.fixer.ui.components.CurrencyDropdown
-import com.example.fixer.ui.components.CurrencyTitle
+import com.kanake.core.model.CurrencySymbol
+import com.kanake.ratex.ui.components.AmountInputField
+import com.kanake.ratex.ui.components.ConvertButton
+import com.kanake.ratex.ui.components.ConvertedAmountField
+import com.kanake.ratex.ui.components.CurrencyDropdown
+import com.kanake.ratex.ui.components.CurrencyTitle
 import org.junit.Rule
 import org.junit.Test
 

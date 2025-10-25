@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn com.kanake.core.Resource$Error
+-dontwarn com.kanake.core.Resource$Loading
+-dontwarn com.kanake.core.Resource$Success
+-dontwarn com.kanake.core.Resource
+-dontwarn com.kanake.core.dao.CurrencyDao
+-dontwarn com.kanake.core.model.CurrencySymbol

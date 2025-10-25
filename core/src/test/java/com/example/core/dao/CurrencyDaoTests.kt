@@ -16,9 +16,10 @@
 package com.example.core.dao
 
 import com.example.core.base.BaseDbTest
-import com.example.core.model.CurrencyRate
-import com.example.core.model.CurrencySymbol
+import com.kanake.core.model.CurrencyRate
+import com.kanake.core.model.CurrencySymbol
 import com.google.common.truth.Truth
+import com.kanake.core.dao.CurrencyDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

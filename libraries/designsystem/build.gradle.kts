@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.designsystem"
+    namespace = "com.kanake.designsystem"
     compileSdk = 34
 
     defaultConfig {
