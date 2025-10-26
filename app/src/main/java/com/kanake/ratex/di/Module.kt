@@ -22,12 +22,6 @@ import com.kanake.ratex.BuildConfig.API_KEY
 import com.kanake.core.Constants.DB_NAME
 import com.kanake.core.dao.CurrencyDao
 import com.kanake.core.db.CurrencyDatabase
-import com.kanake.currency.repo.CurrencyRepository
-import com.kanake.currency.sources.LocalDataSource
-import com.kanake.currency.sources.RemoteDataSource
-import com.kanake.currencyimpl.repoimpl.CurrencyRepositoryImpl
-import com.kanake.currencyimpl.sourceimpl.LocalDataSourceImpl
-import com.kanake.currencyimpl.sourceimpl.RemoteDataSourceImpl
 import com.kanake.network.ApiInterceptor
 import com.kanake.network.FixerApiService
 import com.kanake.network.NetworkChecker
@@ -49,80 +43,49 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        val okHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(ApiInterceptor(API_KEY))
             .callTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
-
-        return okHttpClient.build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
+            .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-    }
 
     @Provides
     @Singleton
-    fun provideFixerApiService(retrofit: Retrofit): FixerApiService {
-        return retrofit.create(FixerApiService::class.java)
-    }
+    fun provideFixerApiService(retrofit: Retrofit): FixerApiService =
+        retrofit.create(FixerApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): CurrencyDatabase {
-        return Room.databaseBuilder(
+    fun provideDatabase(@ApplicationContext context: Context): CurrencyDatabase =
+        Room.databaseBuilder(
             context,
             CurrencyDatabase::class.java,
             DB_NAME
         ).fallbackToDestructiveMigration().build()
-    }
 
     @Provides
-    fun provideCurrencyDao(database: CurrencyDatabase): CurrencyDao {
-        return database.currencyDao()
-    }
+    fun provideCurrencyDao(database: CurrencyDatabase): CurrencyDao = database.currencyDao()
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(currencyDao: CurrencyDao): LocalDataSource {
-        return LocalDataSourceImpl(currencyDao)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRemoteDataSource(apiService: FixerApiService): RemoteDataSource {
-        return RemoteDataSourceImpl(apiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideCurrencyRepository(
-        remoteDataSource: RemoteDataSource,
-        localDataSource: LocalDataSource,
-        networkChecker: NetworkChecker
-    ): CurrencyRepository {
-        return CurrencyRepositoryImpl(remoteDataSource, localDataSource, networkChecker)
-    }
-
-    @Provides
-    @Singleton
-    fun provideNetworkChecker(@ApplicationContext context: Context): NetworkChecker {
-        return NetworkChecker(context)
-    }
+    fun provideNetworkChecker(@ApplicationContext context: Context): NetworkChecker =
+        NetworkChecker(context)
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.testing"
+    namespace = "com.kanake.testing"
     compileSdk = 34
 
     defaultConfig {
@@ -35,11 +35,11 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":features:currency"))
-    implementation(libs.junit4.ext)
-    implementation(libs.turbine)
-    implementation(libs.mock.android)
-    implementation(libs.google.truth)
-    implementation(libs.coroutines.test)
-    implementation(libs.espresso.core)
-    implementation(libs.androidx.arch.core.testing)
+    api(libs.junit4.ext)
+    api(libs.turbine)
+    api(libs.mock.android)
+    api(libs.google.truth)
+    api(libs.coroutines.test)
+    api(libs.espresso.core)
+    api(libs.androidx.arch.core.testing)
 }

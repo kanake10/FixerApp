@@ -29,8 +29,8 @@ android {
         applicationId = "com.kanake.ratex"
         minSdk = 24
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 8
+        versionName = "1.0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_KEY", "\"$apiKey\"")
@@ -55,8 +55,8 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -121,7 +121,7 @@ dependencies {
     implementation(project(":features:currency"))
     implementation(project(":features:currencyimpl"))
     implementation(project(":libraries:network"))
-    implementation(project(":libraries:testing"))
+    testImplementation(project(":libraries:testing"))
     implementation(libs.hilt.android)
     implementation(libs.androidx.runtime.livedata)
     ksp("com.google.dagger:hilt-compiler:2.50")

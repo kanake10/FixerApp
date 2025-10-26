@@ -39,7 +39,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":features:currency"))
     implementation(project(":libraries:network"))
-    implementation(project(":libraries:testing"))
+    testImplementation(project(":libraries:testing"))
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android)

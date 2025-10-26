@@ -109,8 +109,6 @@ class CurrencyRepositoryImpl @Inject constructor(
         if (fromRate == null) throw IllegalArgumentException("Exchange rate for $from not found")
         if (toRate == null) throw IllegalArgumentException("Exchange rate for $to not found")
 
-        return (amount?.div(fromRate))?.times(toRate) ?: 0.00
+        return (amount / fromRate) * toRate
     }
 }
-
-
